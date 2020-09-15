@@ -3,7 +3,9 @@ const KoaRouter = require('koa-router')
 const app = new Koa()
 const router = new KoaRouter()
 
-const data = require('./datas/index.json')
+const homeData = require('./datas/index.json')
+const categoryData = require('./datas/categoryDatas.json')
+const buyingData = require('./datas/buying.json')
 
 // 使用中间件
 app.use(router.routes()) // 使用路由器所有路由
@@ -11,7 +13,15 @@ app.use(router.routes()) // 使用路由器所有路由
 
 // 路由
 router.get('/getHomeData', function(ctx) {
-	ctx.body = data // 响应数据
+	ctx.body = homeData // 响应数据
+})
+
+router.get('/getCategoryList', function(ctx) {
+	ctx.body = categoryData
+})
+
+router.get('/getBuyingData', function(ctx) {
+	ctx.body = buyingData
 })
 
 // 监听3000端口
