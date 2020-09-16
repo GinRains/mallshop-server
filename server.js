@@ -1,5 +1,9 @@
 const Koa = require('koa')
 const KoaRouter = require('koa-router')
+// Node 入口
+const Fly=require("flyio/src/node")
+const fly=new Fly;
+const jwt = require('jsonwebtoken');
 const app = new Koa()
 const router = new KoaRouter()
 
@@ -36,6 +40,24 @@ router.get('/getindexCateList', async function(ctx) {
 		code:200,
 		data:cateList
 	};
+})
+
+// 获取openid
+router.get('/getOpenId', async function(ctx) {
+	const {code} = ctx.query
+	const appId = 'wxd0d785600cb4dd94'
+	const secret = '879452b6c462d59f606911a976f97cc9'
+	const url = `https://api.weixin.qq.com/sns/jscode2session?appid=${appId}&secret=${secret}&js_code=${code}&grant_type=authorization_code`
+	
+	const res = await fly.get(url)
+	const {openid} = JSON.parse(res.data)
+	const salt = 'JTRNL'
+	// 加密
+	const openidSign = jwt.sign(openid, salt)
+	// 解密
+	const openidVerify = jwt.verify(openid, salt)
+	
+	ctx.body = openidSign
 })
 
 router.get('/getGoodsById', function(ctx) {
