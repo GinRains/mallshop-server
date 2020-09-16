@@ -6,6 +6,8 @@ const router = new KoaRouter()
 const homeData = require('./datas/index.json')
 const categoryData = require('./datas/categoryDatas.json')
 const buyingData = require('./datas/buying.json')
+const cateList = require('./datas/indexCateList.json')
+const goodsList = require('./datas/goods.json')
 
 // 使用中间件
 app.use(router.routes()) // 使用路由器所有路由
@@ -22,6 +24,23 @@ router.get('/getCategoryList', function(ctx) {
 
 router.get('/getBuyingData', function(ctx) {
 	ctx.body = buyingData
+})
+
+router.get('/getindexCateList', async function(ctx) {
+	await new Promise((resolve,reject)=>{
+		setTimeout(()=>{
+			resolve()
+		},2000)
+	})
+	ctx.body={
+		code:200,
+		data:cateList
+	};
+})
+
+router.get('/getGoodsById', function(ctx) {
+	const {id} = ctx.query
+	ctx.body = goodsList.find(item => item.id === parseInt(id))
 })
 
 // 监听3000端口
